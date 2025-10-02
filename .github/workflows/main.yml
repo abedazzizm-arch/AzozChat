@@ -1,0 +1,107 @@
+socketiofrom flet import *
+threading
+kivy 
+time
+OAuth2Session
+webbrowser
+requests
+websocket
+json
+TextInput
+ Image
+ Label
+Button
+ BoxLayout
+ScreenManager, Screen
+Window
+ get_color_from_hex
+def main(page: ft.Page):
+    page.title = "تسجيل الدخول و إنشاء حساب"
+    page.theme_mode = ThemeMode.DARK
+    page.bgcolor = "#1e1e2f"
+    page.window_width = 350
+    page.window_height = 740
+    page.window.max_height=740
+    page.window.max_width = 350
+    page.window.min_height = 740
+    page.window.min_width = 350
+
+    PRIMARY_COLOR = "#6C63FF"
+    ERROR_COLOR = "#FF5C5C"
+
+    email_field = TextField(label="الإيميل", width=300, border_color=PRIMARY_COLOR)
+    password_field = TextField(label="كلمة المرور", width=300, password=True, can_reveal_password=True, border_color=PRIMARY_COLOR)
+    message_text = Text("", size=12)
+
+    title_text = Text("تسجيل الدخول", size=30, weight="bold", color=PRIMARY_COLOR)
+
+    toggle_button = TextButton("ليس لديك حساب؟ أنشئ حساب", style=ButtonStyle(color=PRIMARY_COLOR))
+
+    def validate_email(email):
+        return email.endswith("@gmail.com")
+
+    def on_submit(e):
+        if not validate_email(email_field.value.strip()):
+            email_field.border_color = ERROR_COLOR
+            message_text.value = "يجب أن يكون الإيميل يحتوي على @gmail.com"
+        else:
+            email_field.border_color = PRIMARY_COLOR
+            message_text.value = "✅ تم التحقق من المعلومات"
+        page.update()
+
+    def switch_view(e):
+        nonlocal is_register
+        is_register = not is_register
+        if is_register:
+            title_text.value = "إنشاء حساب"
+            submit_btn.text = "تسجيل"
+            toggle_button.text = "لديك حساب؟ تسجيل الدخول"
+        else:
+            title_text.value = "تسجيل الدخول"
+            submit_btn.text = "دخول"
+            toggle_button.text = "ليس لديك حساب؟ أنشئ حساب"
+        message_text.value = ""
+        email_field.value = ""
+        password_field.value = ""
+        email_field.border_color = PRIMARY_COLOR
+        page.update()
+
+    submit_btn = ElevatedButton("دخول", on_click=on_submit, bgcolor=PRIMARY_COLOR, color="white", width=300)
+
+    is_register = False
+    toggle_button.on_click = switch_view
+
+    container = Container(
+        content=Column(
+            [
+                Container(content=title_text),
+
+                Container(height=20),
+                email_field,
+                password_field,
+                Container(height=10),
+                submit_btn,
+                message_text,
+                Container(height=10),
+                toggle_button
+            ],
+            alignment=MainAxisAlignment.CENTER,
+            horizontal_alignment=CrossAxisAlignment.CENTER
+        ),
+        padding=30,
+        border_radius=20,
+        bgcolor="#29293d",
+        width=350,
+        height=450,
+        shadow=BoxShadow(
+            spread_radius=3,
+            blur_radius=15,
+            color="#00000088",
+            offset=Offset(0, 5),
+        )
+    )
+
+    page.add(Container(content=container, expand=True))
+
+
+app(target=main)
