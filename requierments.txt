@@ -1,0 +1,17 @@
+kivy 
+socketio
+threading
+time
+OAuth2Session
+webbrowser
+requests
+websocket
+json
+TextInput
+ Image
+ Label
+Button
+ BoxLayout
+ScreenManager, Screen
+Window
+ get_color_from_hex
